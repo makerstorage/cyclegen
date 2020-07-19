@@ -88,7 +88,11 @@
                 </v-toolbar-title>
               </v-toolbar>
 
-              <v-btn color="primary" block style="height:50px;"
+              <v-btn
+                @click="downloadCode"
+                color="primary"
+                block
+                style="height:50px;"
                 >Export Code
                 <v-icon right>code</v-icon>
               </v-btn>
@@ -177,6 +181,31 @@ export default {
     },
     itemDeleteClicked(index) {
       this.deletegcode(index);
+    },
+    downloadCode() {
+      var gcodes = this.getgcodes;
+      var text = "";
+      gcodes.forEach(function(row) {
+        text = text + row.gcode + "\r\n";
+      });
+
+      // console.log(text);
+
+      //var data = new Blob([text], { type: "text/plain" });
+
+      var element = document.createElement("a");
+      element.setAttribute(
+        "href",
+        "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+      );
+      element.setAttribute("download", "rum.gco");
+
+      element.style.display = "none";
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
     }
   }
 };
